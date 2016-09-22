@@ -18,7 +18,13 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-//needs cookie-session
+app.use(cookieSession({
+  name: 'g32auth',
+  secret: 'doesntmatter'
+}))
+
+
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 
