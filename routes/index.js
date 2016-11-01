@@ -23,7 +23,8 @@ router.get('/private', function(req, res, next) {
       message: 'Private page, not authorized.'
     })
   } else {
-    var userInfo = req.session.userInfo
+    console.log('userInfo is: ', req.session.userInfo);
+    var userInfo = req.session.userInfo[0]
     res.render('private', {username: userInfo.user_name, firstname: userInfo.first_name, lastname: userInfo.last_name})
   }
 });
@@ -56,6 +57,7 @@ router.post('/login', function(req, res, next) {
           message: 'Username or password incorrect.'
         })
       } else {
+        console.log('setting userinfo (login): ', user);
         req.session.userInfo = user
         res.redirect('/private')
       }
@@ -83,9 +85,10 @@ router.post('/signup', function(req, res, next) {
           is_admin: false
         })
         .then(function(results) {
-          console.log(results);
-          // delete results.password;
-          req.session.userInfo = results
+          let userSesh = results;
+          delete userSesh[0].password
+          req.session.userInfo = userSesh
+          console.log('setting user info (signup): ', userSesh);
           res.redirect('/private')
         })
     }
